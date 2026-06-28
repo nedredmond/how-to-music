@@ -25,4 +25,14 @@ export default defineConfig([
     language: "css/css",
     extends: ["css/recommended"],
   },
+  {
+    files: ["**/*.{js,mjs,cjs,ts,mts,cts}"],
+    rules: {
+      "no-unused-vars": "off",                          // disable base rule
+      "@typescript-eslint/no-unused-vars": ["error", {
+        argsIgnorePattern: "^_",
+        varsIgnorePattern: "^_",
+      }],
+    },
+  },
 ]);

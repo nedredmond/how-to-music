@@ -1,42 +1,69 @@
-import type { Note, Intervals, Semitone, Tone } from "./types";
+import type { Note, Intervals, Semitone } from "./types";
 
 export const a4hz = 440.0;
+export const naturals = ["A", "B", "C", "D", "E", "F", "G"] as const;
 export const notes = [
-  "A",
+  {
+    sharp: "G𝄪",
+    natural: "A",
+    flat: "B𝄫",
+  },
   {
     sharp: "A♯",
     flat: "B♭",
   },
-  "B",
-  "C",
+  {
+    sharp: "A𝄪",
+    natural: "B",
+    flat: "C♭",
+  },
+  {
+    sharp: "B♯",
+    natural: "C",
+    flat: "D𝄫",
+  },
   {
     sharp: "C♯",
     flat: "D♭",
   },
-  "D",
+  {
+    sharp: "C𝄪",
+    natural: "D",
+    flat: "E𝄫",
+  },
   {
     sharp: "D♯",
     flat: "E♭",
   },
-  "E",
-  "F",
+  {
+    sharp: "D𝄪",
+    natural: "E",
+    flat: "F♭",
+  },
+  {
+    sharp: "E♯",
+    natural: "F",
+    flat: "G𝄫",
+  },
   {
     sharp: "F♯",
     flat: "G♭",
   },
-  "G",
+  {
+    sharp: "F𝄪",
+    natural: "G",
+    flat: "A𝄫",
+  },
   {
     sharp: "G♯",
     flat: "A♭",
   },
-] as const satisfies (Tone | Semitone)[];
+] as const satisfies Semitone[];
 export const semitonesInOctave = notes.length;
 export const noteToIndex = notes.reduce(
   (map, value, index) => {
-    if (typeof value === "string") map[value] = index;
-    else {
-      map[value.flat] = index;
-      map[value.sharp] = index;
+    for (const key in value) {
+      map[value[key as keyof typeof value]] = index;
     }
     return map;
   },
