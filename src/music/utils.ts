@@ -1,8 +1,8 @@
 import {
   a4hz,
   naturals,
-  notes,
-  noteToIndex,
+  semitones,
+  semitoneToIndex,
   scaleIntervals,
   semitonesInOctave,
 } from "./constants";
@@ -41,11 +41,11 @@ export const getScale = (
 ): Readonly<Scale> => {
   const scale = new Array<Note>(8);
   scale[0] = tonic;
-  let noteIdx = noteToIndex[tonic];
+  let noteIdx = semitoneToIndex[tonic];
   for (const [i, interval] of scaleIntervals[intervals].entries()) {
     noteIdx += interval;
-    const currentSemitone = notes[noteIdx % semitonesInOctave];
-    console.log(tonic, noteToIndex);
+    const currentSemitone = semitones[noteIdx % semitonesInOctave];
+    console.log(tonic, semitoneToIndex);
     scale[i + 1] = determineNextNotation(currentSemitone, scale[i]);
   }
   if (!isScale(scale)) {

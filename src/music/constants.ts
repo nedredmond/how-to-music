@@ -7,7 +7,7 @@ export const accidentals = {
   natural: "♮",
   sharp: "♯",
 } as const;
-export const notes = [
+export const semitones = [
   ["G𝄪", "A", "B𝄫"],
   ["A♯", "B♭", "C𝄫"],
   ["A𝄪", "B", "C♭"],
@@ -21,8 +21,8 @@ export const notes = [
   ["F𝄪", "G", "A𝄫"],
   ["G♯", "A♭"],
 ] as const satisfies Semitone[];
-export const semitonesInOctave = notes.length;
-export const noteToIndex = notes.reduce(
+export const semitonesInOctave = semitones.length;
+export const semitoneToIndex = semitones.reduce(
   (map, semitone, index) => {
     for (const note of semitone) {
       map[note as Note] = index;
