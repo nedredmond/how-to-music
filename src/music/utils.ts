@@ -30,9 +30,7 @@ const isScale = (scale: Array<Note>): scale is Scale =>
 const determineNextNotation = (semitone: Semitone, prevNote: Note) => {
   const prevNaturalIdx = naturals.indexOf(extractNatural(prevNote));
   const nextNatural = naturals[(prevNaturalIdx + 1) % naturals.length];
-  const nextNote = Object.values(semitone).find((note) =>
-    note.includes(nextNatural),
-  );
+  const nextNote = semitone.find((note) => note?.includes(nextNatural));
   if (!nextNote) throw new Error("Cannot construct scale!");
   return nextNote;
 };
@@ -46,8 +44,9 @@ export const getScale = (
   let noteIdx = noteToIndex[tonic];
   for (const [i, interval] of scaleIntervals[intervals].entries()) {
     noteIdx += interval;
-    const currentNote = notes[noteIdx % semitonesInOctave];
-    scale[i + 1] = determineNextNotation(currentNote, scale[i]);
+    const currentSemitone = notes[noteIdx % semitonesInOctave];
+    console.log(tonic, noteToIndex);
+    scale[i + 1] = determineNextNotation(currentSemitone, scale[i]);
   }
   if (!isScale(scale)) {
     throw new Error("Cannot construct scale!");
