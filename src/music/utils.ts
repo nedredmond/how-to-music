@@ -5,6 +5,8 @@ import {
   semitoneToIndex,
   scaleIntervals,
   semitonesInOctave,
+  modes,
+  scaleLength,
 } from "./constants";
 import type {
   Natural,
@@ -12,6 +14,8 @@ import type {
   Scale,
   Semitone,
   GetNaturalFromNote,
+  Mode,
+  ScaleName,
 } from "./types";
 
 export const getFreq = (semitones: number, relativeToFreq: number = a4hz) =>
@@ -37,17 +41,28 @@ const determineNextNotation = (semitone: Semitone, prevNote: Note) => {
 
 export const getScale = (
   tonic: Note,
-  intervals: keyof typeof scaleIntervals,
+  scaleName: ScaleName,
+  mode: Mode = "ionian",
 ): Readonly<Scale> => {
-  const scale = new Array<Note>(8);
+  let scale = new Array<Note>(scaleLength);
   scale[0] = tonic;
   let noteIdx = semitoneToIndex[tonic];
-  for (const [i, interval] of scaleIntervals[intervals].entries()) {
+  for (const [i, interval] of scaleIntervals[scaleName].entries()) {
     noteIdx += interval;
     const currentSemitone = semitones[noteIdx % semitonesInOctave];
     console.log(tonic, semitoneToIndex);
     scale[i + 1] = determineNextNotation(currentSemitone, scale[i]);
   }
+
+  if (scaleName === "major" && mode !== "ionian") {
+    const modeIdx = modes.findIndex((m) => m === mode);
+    scale = [
+      ...scale.slice(modeIdx, scaleLength - 1),
+      ...scale.slice(0, modeIdx),
+      scale[0]
+    ];
+  }
+
   if (!isScale(scale)) {
     throw new Error("Cannot construct scale!");
   }

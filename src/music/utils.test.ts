@@ -1,7 +1,7 @@
 import { expect, test } from "vitest";
 import { getScale } from "./utils";
 import type { scaleIntervals } from "./constants";
-import type { Note, Scale } from "./types";
+import type { Mode, Note, Scale } from "./types";
 
 type ScaleName = keyof typeof scaleIntervals;
 
@@ -25,6 +25,21 @@ test.each([
   "getScale returns correct $0 $1 scale",
   (root, scale, want) => {
     expect(getScale(root, scale)).toEqual(want);
+  },
+);
+
+test.each([
+  ["C", "ionian", ["C", "D", "E", "F", "G", "A", "B", "C"]],
+  ["C", "dorian", ["D", "E", "F", "G", "A", "B", "C", "D"]],
+  ["C", "phrygian", ["E", "F", "G", "A", "B", "C", "D", "E"]],
+  ["C", "lydian", ["F", "G", "A", "B", "C", "D", "E", "F"]],
+  ["C", "mixolydian", ["G", "A", "B", "C", "D", "E", "F", "G"]],
+  ["C", "aeolian", ["A", "B", "C", "D", "E", "F", "G", "A"]],
+  ["C", "locrian", ["B", "C", "D", "E", "F", "G", "A", "B"]],
+] satisfies [Note, Mode, Scale][])(
+  "getScale returns correct $0 $1 scale",
+  (root, mode, want) => {
+    expect(getScale(root, "major", mode)).toEqual(want);
   },
 );
 

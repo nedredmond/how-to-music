@@ -1,12 +1,15 @@
 import type { Note, Intervals, Semitone } from "./types";
 
 export const a4hz = 440.0;
+export const scaleLength = 8;
+
 export const naturals = ["A", "B", "C", "D", "E", "F", "G"] as const;
 export const accidentals = {
   flat: "♭",
   natural: "♮",
   sharp: "♯",
 } as const;
+
 export const semitones = [
   ["G𝄪", "A", "B𝄫"],
   ["A♯", "B♭", "C𝄫"],
@@ -31,6 +34,7 @@ export const semitoneToIndex = semitones.reduce(
   },
   {} as Record<Note, number>,
 );
+
 export const scaleIntervals = {
   major: [2, 2, 1, 2, 2, 2, 1],
   naturalMinor: [2, 1, 2, 2, 1, 2, 2],
@@ -39,3 +43,14 @@ export const scaleIntervals = {
 } as const satisfies {
   [key: string]: Intervals;
 };
+
+// offsets from root of major scale
+export const modes = [
+  "ionian",
+  "dorian",
+  "phrygian",
+  "lydian",
+  "mixolydian",
+  "aeolian",
+  "locrian",
+] as const;
