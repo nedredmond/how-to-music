@@ -7,14 +7,20 @@ type ScaleName = keyof typeof scaleIntervals;
 
 test.each([
   ["C", "major", ["C", "D", "E", "F", "G", "A", "B", "C"]],
-  ["C", "naturalMinor", ["C", "D", "E♭", "F", "G", "A♭", "B♭", "C"]],
-  ["C", "harmonicMinor", ["C", "D", "E♭", "F", "G", "A♭", "B", "C"]],
-  ["C", "melodicMinor", ["C", "D", "E♭", "F", "G", "A", "B", "C"]],
   ["C♯", "major", ["C♯", "D♯", "E♯", "F♯", "G♯", "A♯", "B♯", "C♯"]],
+  ["C♭", "major", ["C♭", "D♭", "E♭", "F♭", "G♭", "A♭", "B♭", "C♭"]],
+  ["D♭", "major", ["D♭", "E♭", "F", "G♭", "A♭", "B♭", "C", "D♭"]],
+  ["D", "major", ["D", "E", "F♯", "G", "A", "B", "C♯", "D"]],
+  ["E♭", "major", ["E♭", "F", "G", "A♭", "B♭", "C", "D", "E♭"]],
+  ["E", "major", ["E", "F♯", "G♯", "A", "B", "C♯", "D♯", "E"]],
+  ["A", "major", ["A", "B", "C♯", "D", "E", "F♯", "G♯", "A"]],
+
   ["C♯", "naturalMinor", ["C♯", "D♯", "E", "F♯", "G♯", "A", "B", "C♯"]],
   ["C♯", "harmonicMinor", ["C♯", "D♯", "E", "F♯", "G♯", "A", "B♯", "C♯"]],
   ["C♯", "melodicMinor", ["C♯", "D♯", "E", "F♯", "G♯", "A♯", "B♯", "C♯"]],
-  ["A", "major", ["A", "B", "C♯", "D", "E", "F♯", "G♯", "A"]],
+  ["C", "naturalMinor", ["C", "D", "E♭", "F", "G", "A♭", "B♭", "C"]],
+  ["C", "harmonicMinor", ["C", "D", "E♭", "F", "G", "A♭", "B", "C"]],
+  ["C", "melodicMinor", ["C", "D", "E♭", "F", "G", "A", "B", "C"]],
 ] satisfies [Note, ScaleName, Scale][])(
   "getScale returns correct $0 $1 scale",
   (root, scale, want) => {

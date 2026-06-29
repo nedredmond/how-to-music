@@ -25,8 +25,7 @@ const isScale = (scale: Array<Note>): scale is Scale =>
   scale.length === 8 && scale[0] === scale[7];
 
 /**
- * Determine whether to add the sharp or flat variant of a semitone.
- *
+ * Determine whether to add the natural, sharp, or flat variant of a semitone.
  */
 const determineNextNotation = (semitone: Semitone, prevNote: Note) => {
   const prevNaturalIdx = naturals.indexOf(extractNatural(prevNote));
