@@ -1,8 +1,12 @@
 import { LitElement, css, html } from "lit";
 import { customElement, property } from "lit/decorators.js";
-import litLogo from "./assets/lit.svg";
-import viteLogo from "./assets/vite.svg";
-import heroImg from "./assets/hero.png";
+import {
+  accidentals,
+  getScale,
+  naturals,
+  scaleIntervals,
+  type Note,
+} from "./music";
 
 /**
  * An example element.
@@ -15,108 +19,70 @@ export class MyElement extends LitElement {
   /**
    * The number of times the button has been clicked.
    */
-  @property({ type: Number })
-  count = 0;
+  @property({ type: String })
+  scale = "";
 
   render() {
     return html`
-      <section id="center">
-        <div class="hero">
-          <img src=${heroImg} class="base" width="170" height="179" alt="" />
-          <img src=${litLogo} class="framework" alt="Lit logo" />
-          <img src=${viteLogo} class="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <slot></slot>
-          <p>
-            Edit <code>src/my-element.ts</code> and save to test
-            <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          class="counter"
-          @click=${this._onClick}
-          part="button"
-        >
-          Count is ${this.count}
-        </button>
-      </section>
-
-      <div class="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg class="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img class="logo" src=${viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://lit.dev/" target="_blank">
-                <img class="button-icon" src=${litLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg class="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg class="button-icon" role="presentation" aria-hidden="true">
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg class="button-icon" role="presentation" aria-hidden="true">
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg class="button-icon" role="presentation" aria-hidden="true">
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg class="button-icon" role="presentation" aria-hidden="true">
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <div class="ticks"></div>
-      <section id="spacer"></section>
+      <main>
+        <form id="center" @submit=${this._onSubmit}>
+          <label>
+            Note
+            <select name="note" id="note">
+              ${naturals.map((note) => html` <option>${note}</option> `)}
+            </select>
+          </label>
+          <label>
+            Accidental
+            <select name="accidental" id="accidental">
+              ${Object.keys(accidentals).map(
+                (a) => html`
+                  <option
+                    aria-label="${a}"
+                    value="${a}"
+                    ?selected=${a === "natural"}
+                  >
+                    ${accidentals[a as keyof typeof accidentals]}
+                  </option>
+                `,
+              )}
+            </select>
+          </label>
+          <label>
+            Scale
+            <select name="scale" id="scale">
+              ${Object.keys(scaleIntervals).map(
+                (scale) => html`
+                  <option aria-label="${scale}" value="${scale}">
+                    ${scale
+                      .replace(/([A-Z])/g, " $1")
+                      .replace(/^./, (m) => m.toUpperCase())}
+                  </option>
+                `,
+              )}
+            </select>
+          </label>
+          <button type="submit" class="counter" part="button">Get scale</button>
+          <output name="scale" for="note accidental scale"
+            >${this.scale}</output
+          >
+        </form>
+      </main>
     `;
   }
 
-  private _onClick() {
-    this.count++;
+  private _onSubmit(e: SubmitEvent) {
+    e.preventDefault();
+    const formData = new FormData(e.target as HTMLFormElement);
+    const data = Object.fromEntries(formData.entries());
+    const a = data.accidental.valueOf();
+    const tonic =
+      data.note.valueOf() +
+      (a === "natural" ? "" : accidentals[a as keyof typeof accidentals]);
+    this.scale = getScale(
+      tonic as Note,
+      data.scale.valueOf() as keyof typeof scaleIntervals,
+    ).join(", ");
   }
 
   static styles = css`

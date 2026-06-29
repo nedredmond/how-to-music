@@ -2,6 +2,11 @@ import type { Note, Intervals, Semitone } from "./types";
 
 export const a4hz = 440.0;
 export const naturals = ["A", "B", "C", "D", "E", "F", "G"] as const;
+export const accidentals = {
+  flat: "♭",
+  natural: "♮",
+  sharp: "♯",
+} as const;
 export const notes = [
   {
     sharp: "G𝄪",
