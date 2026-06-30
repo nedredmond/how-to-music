@@ -3,10 +3,9 @@ import {
   naturals,
   semitones,
   semitoneToIndex,
-  scaleIntervals,
   semitonesInOctave,
-  modes,
   scaleLength,
+  intervals as intervalSets,
 } from "./constants";
 import type {
   Natural,
@@ -14,8 +13,7 @@ import type {
   Scale,
   Semitone,
   GetNaturalFromNote,
-  Mode,
-  ScaleName,
+  IntervalSetName,
 } from "./types";
 
 export const getFreq = (semitones: number, relativeToFreq: number = a4hz) =>
@@ -41,26 +39,15 @@ const determineNextNotation = (semitone: Semitone, prevNote: Note) => {
 
 export const getScale = (
   tonic: Note,
-  scaleName: ScaleName,
-  mode: Mode = "ionian",
+  intervalSetName: IntervalSetName,
 ): Readonly<Scale> => {
   let scale = new Array<Note>(scaleLength);
   scale[0] = tonic;
   let noteIdx = semitoneToIndex[tonic];
-  for (const [i, interval] of scaleIntervals[scaleName].entries()) {
+  for (const [idx, interval] of intervalSets[intervalSetName].entries()) {
     noteIdx += interval;
     const currentSemitone = semitones[noteIdx % semitonesInOctave];
-    console.log(tonic, semitoneToIndex);
-    scale[i + 1] = determineNextNotation(currentSemitone, scale[i]);
-  }
-
-  if (scaleName === "major" && mode !== "ionian") {
-    const modeIdx = modes.findIndex((m) => m === mode);
-    scale = [
-      ...scale.slice(modeIdx, scaleLength - 1),
-      ...scale.slice(0, modeIdx),
-      scale[0]
-    ];
+    scale[idx + 1] = determineNextNotation(currentSemitone, scale[idx]);
   }
 
   if (!isScale(scale)) {

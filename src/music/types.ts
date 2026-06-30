@@ -1,4 +1,4 @@
-import type { naturals, scaleIntervals, modes } from "./constants";
+import type { naturals, scaleIntervals, modeIntervals } from "./constants";
 
 /**
  * Starting from tonic / root, interval to next note in scale
@@ -25,4 +25,5 @@ export type GetNaturalFromNote<T extends Note> =
   T extends `${infer First}${infer _}` ? First : "";
 
 export type ScaleName = keyof typeof scaleIntervals;
-export type Mode = (typeof modes)[number];
+export type Mode = keyof typeof modeIntervals;
+export type IntervalSetName = ScaleName | Mode;

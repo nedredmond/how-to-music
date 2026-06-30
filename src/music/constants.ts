@@ -1,4 +1,4 @@
-import type { Note, Intervals, Semitone } from "./types";
+import type { Note, Intervals as IntervalSet, Semitone } from "./types";
 
 export const a4hz = 440.0;
 export const scaleLength = 8;
@@ -41,16 +41,19 @@ export const scaleIntervals = {
   harmonicMinor: [2, 1, 2, 2, 1, 3, 1],
   melodicMinor: [2, 1, 2, 2, 2, 2, 1],
 } as const satisfies {
-  [key: string]: Intervals;
+  [key: string]: IntervalSet;
 };
 
-// offsets from root of major scale
-export const modes = [
-  "ionian",
-  "dorian",
-  "phrygian",
-  "lydian",
-  "mixolydian",
-  "aeolian",
-  "locrian",
-] as const;
+export const modeIntervals = {
+  ionian: [2, 2, 1, 2, 2, 2, 1],
+  dorian: [2, 1, 2, 2, 2, 1, 2],
+  phrygian: [1, 2, 2, 2, 1, 2, 2],
+  lydian: [2, 2, 2, 1, 2, 2, 1],
+  mixolydian: [2, 2, 1, 2, 2, 1, 2],
+  aeolian: [2, 1, 2, 2, 1, 2, 2],
+  locrian: [1, 2, 2, 1, 2, 2, 2],
+} as const satisfies {
+  [key: string]: IntervalSet;
+};
+
+export const intervals = {...scaleIntervals, ...modeIntervals};

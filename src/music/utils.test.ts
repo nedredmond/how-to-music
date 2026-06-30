@@ -30,16 +30,16 @@ test.each([
 
 test.each([
   ["C", "ionian", ["C", "D", "E", "F", "G", "A", "B", "C"]],
-  ["C", "dorian", ["D", "E", "F", "G", "A", "B", "C", "D"]],
-  ["C", "phrygian", ["E", "F", "G", "A", "B", "C", "D", "E"]],
-  ["C", "lydian", ["F", "G", "A", "B", "C", "D", "E", "F"]],
-  ["C", "mixolydian", ["G", "A", "B", "C", "D", "E", "F", "G"]],
-  ["C", "aeolian", ["A", "B", "C", "D", "E", "F", "G", "A"]],
-  ["C", "locrian", ["B", "C", "D", "E", "F", "G", "A", "B"]],
+  ["C", "dorian", ["C", "D", "E♭", "F", "G", "A", "B♭", "C"]],
+  ["C", "phrygian", ["C", "D♭", "E♭", "F", "G", "A♭", "B♭", "C"]],
+  ["C", "lydian", ["C", "D", "E", "F♯", "G", "A", "B", "C"]],
+  ["C", "mixolydian", ["C", "D", "E", "F", "G", "A", "B♭", "C"]],
+  ["C", "aeolian", ["C", "D", "E♭", "F", "G", "A♭", "B♭", "C"]],
+  ["C", "locrian", ["C", "D♭", "E♭", "F", "G♭", "A♭", "B♭", "C"]],
 ] satisfies [Note, Mode, Scale][])(
   "getScale returns correct $0 $1 scale",
   (root, mode, want) => {
-    expect(getScale(root, "major", mode)).toEqual(want);
+    expect(getScale(root, mode)).toEqual(want);
   },
 );
 
