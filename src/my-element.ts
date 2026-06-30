@@ -27,34 +27,33 @@ export class MyElement extends LitElement {
     return html`
       <main>
         <form id="center" @submit=${this._onSubmit}>
-          <label>
-            Note
-            <select name="note" id="note">
-              ${naturals.map((note) => html` <option>${note}</option> `)}
-            </select>
-          </label>
-          <label>
-            Accidental
-            <select name="accidental" id="accidental">
+          <div class="wrapper">
+            <label>
+              Note:
+              <select name="note" id="note">
+                ${naturals.map((note) => html` <option>${note}</option> `)}
+              </select>
+            </label>
+            <fieldset id="accidental">
+              <legend>Accidental:</legend>
               ${Object.keys(accidentals).map(
                 (a) => html`
-                  <option
+                  <input
+                    type="radio"
+                    name="accidental"
                     aria-label="${a}"
                     value="${a}"
-                    ?selected=${a === "natural"}
-                  >
-                    ${accidentals[a as keyof typeof accidentals]}
-                  </option>
+                    ?checked=${a === "natural"}
+                  />
+                  <label> ${accidentals[a as keyof typeof accidentals]} </label>
                 `,
               )}
-            </select>
-          </label>
-          <label>
-            Intervals
-            <select name="scale" id="scale">
-              <optgroup label="Scale">
-              ${Object.keys(scaleIntervals).map(
-                (scale) => html`
+            </fieldset>
+            <label>
+              Scale:
+              <select name="scale" id="scale">
+                ${Object.keys(scaleIntervals).map(
+                  (scale) => html`
                   <option aria-label="${scale}" value="${scale}">
                     ${scale
                       .replace(/([A-Z])/g, " $1")
@@ -62,11 +61,10 @@ export class MyElement extends LitElement {
                   </option>
                   </optgroup>
                 `,
-              )}
-              </optgroup>
-              <optgroup label="Mode">
-              ${Object.keys(modeIntervals).map(
-                (mode) => html`
+                )}
+                <optgroup label="Mode">
+                  ${Object.keys(modeIntervals).map(
+                    (mode) => html`
                   <option aria-label="${mode}" value="${mode}">
                     ${mode
                       .replace(/([A-Z])/g, " $1")
@@ -74,11 +72,14 @@ export class MyElement extends LitElement {
                   </option>
                   </optgroup>
                 `,
-              )}
-              </optgroup>
-            </select>
-          </label>
-          <button type="submit" class="counter" part="button">Get scale</button>
+                  )}
+                </optgroup>
+              </select>
+            </label>
+            <button type="submit" class="counter" part="button">
+              Get scale
+            </button>
+          </div>
           <output name="scale" for="note accidental scale"
             >${this.scale}</output
           >
@@ -193,6 +194,25 @@ export class MyElement extends LitElement {
       background: var(--code-bg);
     }
 
+    .wrapper {
+      display: flex;
+      place-items: center;
+      gap: 16px;
+    }
+
+    #accidental {
+      border: unset;
+      margin: unset;
+      padding: unset;
+      display: flex;
+    }
+
+    label {
+      display: flex;
+      flex-direction: column;
+      place-items: start center;
+    }
+
     .counter {
       font-family: var(--mono);
       font-size: 16px;
@@ -203,7 +223,6 @@ export class MyElement extends LitElement {
       background: var(--accent-bg);
       border: 2px solid transparent;
       transition: border-color 0.3s;
-      margin-bottom: 24px;
       cursor: pointer;
     }
 
@@ -256,6 +275,10 @@ export class MyElement extends LitElement {
         rotateY(39deg) scale(0.8);
     }
 
+    main {
+      height: 100vh;
+    }
+
     #center {
       display: flex;
       flex-direction: column;
@@ -263,6 +286,8 @@ export class MyElement extends LitElement {
       place-content: center;
       place-items: center;
       flex-grow: 1;
+      height: 100%;
+      margin: auto;
     }
 
     #next-steps {

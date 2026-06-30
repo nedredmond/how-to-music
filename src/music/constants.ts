@@ -56,4 +56,4 @@ export const modeIntervals = {
   [key: string]: IntervalSet;
 };
 
-export const intervals = {...scaleIntervals, ...modeIntervals};
+export const intervals = { ...scaleIntervals, ...modeIntervals };

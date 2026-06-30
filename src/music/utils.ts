@@ -41,7 +41,7 @@ export const getScale = (
   tonic: Note,
   intervalSetName: IntervalSetName,
 ): Readonly<Scale> => {
-  let scale = new Array<Note>(scaleLength);
+  const scale = new Array<Note>(scaleLength);
   scale[0] = tonic;
   let noteIdx = semitoneToIndex[tonic];
   for (const [idx, interval] of intervalSets[intervalSetName].entries()) {
