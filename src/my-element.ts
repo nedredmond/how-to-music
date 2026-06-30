@@ -3,6 +3,7 @@ import { customElement, property } from "lit/decorators.js";
 import {
   accidentals,
   getScale,
+  modeIntervals,
   naturals,
   scaleIntervals,
   type Note,
@@ -49,8 +50,9 @@ export class MyElement extends LitElement {
             </select>
           </label>
           <label>
-            Scale
+            Intervals
             <select name="scale" id="scale">
+              <optgroup label="Scale">
               ${Object.keys(scaleIntervals).map(
                 (scale) => html`
                   <option aria-label="${scale}" value="${scale}">
@@ -58,8 +60,22 @@ export class MyElement extends LitElement {
                       .replace(/([A-Z])/g, " $1")
                       .replace(/^./, (m) => m.toUpperCase())}
                   </option>
+                  </optgroup>
                 `,
               )}
+              </optgroup>
+              <optgroup label="Mode">
+              ${Object.keys(modeIntervals).map(
+                (mode) => html`
+                  <option aria-label="${mode}" value="${mode}">
+                    ${mode
+                      .replace(/([A-Z])/g, " $1")
+                      .replace(/^./, (m) => m.toUpperCase())}
+                  </option>
+                  </optgroup>
+                `,
+              )}
+              </optgroup>
             </select>
           </label>
           <button type="submit" class="counter" part="button">Get scale</button>
