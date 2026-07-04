@@ -1,13 +1,20 @@
 import type { Note, Intervals as IntervalSet, Semitone } from "./types";
 
 export const a4hz = 440.0;
-export const scaleLength = 8;
+export const heptatonicScaleLength = 7;
 
 export const naturals = ["A", "B", "C", "D", "E", "F", "G"] as const;
 export const accidentals = {
   flat: "♭",
   natural: "♮",
   sharp: "♯",
+} as const;
+export const qualities = {
+  major: "",
+  minor: "m",
+  seventh: "<sup>7</sup>",
+  diminished: "°",
+  augmented: "<sup>+</sup>",
 } as const;
 
 export const semitones = [
@@ -24,8 +31,8 @@ export const semitones = [
   ["F𝄪", "G", "A𝄫"],
   ["G♯", "A♭"],
 ] as const satisfies Semitone[];
-export const semitonesInOctave = semitones.length;
-export const semitoneToIndex = semitones.reduce(
+export const semitonesInOctave = semitones.length; // 12
+export const eharmonicEquivalentToSemitoneIdx = semitones.reduce(
   (map, semitone, index) => {
     for (const note of semitone) {
       map[note as Note] = index;
@@ -43,7 +50,6 @@ export const scaleIntervals = {
 } as const satisfies {
   [key: string]: IntervalSet;
 };
-
 export const modeIntervals = {
   ionian: [2, 2, 1, 2, 2, 2, 1],
   dorian: [2, 1, 2, 2, 2, 1, 2],
@@ -55,5 +61,12 @@ export const modeIntervals = {
 } as const satisfies {
   [key: string]: IntervalSet;
 };
-
 export const intervals = { ...scaleIntervals, ...modeIntervals };
+
+export const chordQualityIntervalMap = {
+  major: [4, 3],
+  minor: [3, 4],
+  seventh: [4, 3, 3],
+  augmented: [4, 4],
+  diminished: [3, 3],
+} as const satisfies Record<keyof typeof qualities, number[]>;

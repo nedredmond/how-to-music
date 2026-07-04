@@ -1,18 +1,21 @@
 import { expect, test } from "vitest";
-import { getScale } from "./utils";
 import type { scaleIntervals } from "./constants";
 import type { Mode, Note, Scale } from "./types";
+import { getScale } from "./scales";
 
 type ScaleName = keyof typeof scaleIntervals;
 
 test.each([
+  ["C♭", "major", ["C♭", "D♭", "E♭", "F♭", "G♭", "A♭", "B♭", "C♭"]],
   ["C", "major", ["C", "D", "E", "F", "G", "A", "B", "C"]],
   ["C♯", "major", ["C♯", "D♯", "E♯", "F♯", "G♯", "A♯", "B♯", "C♯"]],
-  ["C♭", "major", ["C♭", "D♭", "E♭", "F♭", "G♭", "A♭", "B♭", "C♭"]],
+
   ["D♭", "major", ["D♭", "E♭", "F", "G♭", "A♭", "B♭", "C", "D♭"]],
   ["D", "major", ["D", "E", "F♯", "G", "A", "B", "C♯", "D"]],
+
   ["E♭", "major", ["E♭", "F", "G", "A♭", "B♭", "C", "D", "E♭"]],
   ["E", "major", ["E", "F♯", "G♯", "A", "B", "C♯", "D♯", "E"]],
+
   ["A", "major", ["A", "B", "C♯", "D", "E", "F♯", "G♯", "A"]],
 
   ["C♯", "naturalMinor", ["C♯", "D♯", "E", "F♯", "G♯", "A", "B", "C♯"]],

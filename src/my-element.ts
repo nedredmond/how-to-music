@@ -1,12 +1,15 @@
-import { LitElement, css, html } from "lit";
+import { LitElement, css, html, nothing } from "lit";
 import { customElement, property } from "lit/decorators.js";
+import { unsafeHTML } from "lit/directives/unsafe-html.js";
 import {
   accidentals,
   getScale,
   modeIntervals,
   naturals,
   scaleIntervals,
+  getChords,
   type Note,
+  type Scale,
 } from "./music";
 
 /**
@@ -20,8 +23,8 @@ export class MyElement extends LitElement {
   /**
    * The number of times the button has been clicked.
    */
-  @property({ type: String })
-  scale = "";
+  @property({ type: Array })
+  scale: Readonly<Scale> | undefined = undefined;
 
   render() {
     return html`
@@ -29,7 +32,7 @@ export class MyElement extends LitElement {
         <form id="center" @submit=${this._onSubmit}>
           <div class="wrapper">
             <label>
-              Note:
+              Key:
               <select name="note" id="note">
                 ${naturals.map((note) => html` <option>${note}</option> `)}
               </select>
@@ -80,9 +83,23 @@ export class MyElement extends LitElement {
               Get scale
             </button>
           </div>
-          <output name="scale" for="note accidental scale"
-            >${this.scale}</output
-          >
+          <output name="scale" for="note accidental scale">
+            ${!this.scale
+              ? nothing
+              : html`
+                  <div>${this.scale}</div>
+                  <ul>
+                    ${getChords(this.scale).map(
+                      (chord) => html`
+                        <li>
+                          ${unsafeHTML(chord.romanNumeral)}:
+                          ${unsafeHTML(chord.name)}
+                        </li>
+                      `,
+                    )}
+                  </ul>
+                `}
+          </output>
         </form>
       </main>
     `;
@@ -99,7 +116,7 @@ export class MyElement extends LitElement {
     this.scale = getScale(
       tonic as Note,
       data.scale.valueOf() as keyof typeof scaleIntervals,
-    ).join(", ");
+    );
   }
 
   static styles = css`

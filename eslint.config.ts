@@ -48,7 +48,7 @@ export default defineConfig([
     },
     rules: {
       "import/no-internal-modules": [ "error", {
-        "allow": [ "assets/*", "lit/*" ],
+        "allow": [ "assets/*", "lit/**" ],
       } ]
     },
   },
