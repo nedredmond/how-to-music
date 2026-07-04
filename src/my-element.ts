@@ -90,7 +90,7 @@ export class MyElement extends LitElement {
               </select>
             </label>
           </div>
-          <output name="scale" for="note accidental scale">
+          <output name="scale" for="note accidental scale" aria-live="polite">
             ${!this.scale
               ? nothing
               : html`
@@ -174,10 +174,6 @@ export class MyElement extends LitElement {
           rgba(0, 0, 0, 0.4) 0 10px 15px -3px,
           rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
       }
-
-      #social .button-icon {
-        filter: invert(1) brightness(2);
-      }
     }
 
     h1,
@@ -207,17 +203,6 @@ export class MyElement extends LitElement {
       margin: 0;
     }
 
-    code {
-      font-family: var(--mono);
-      font-size: 15px;
-      line-height: 135%;
-      display: inline-flex;
-      padding: 4px 8px;
-      border-radius: 4px;
-      color: var(--text-h);
-      background: var(--code-bg);
-    }
-
     .wrapper {
       display: flex;
       place-items: center;
@@ -237,68 +222,6 @@ export class MyElement extends LitElement {
       place-items: start center;
     }
 
-    .counter {
-      font-family: var(--mono);
-      font-size: 16px;
-      display: inline-flex;
-      padding: 5px 10px;
-      border-radius: 5px;
-      color: var(--accent);
-      background: var(--accent-bg);
-      border: 2px solid transparent;
-      transition: border-color 0.3s;
-      cursor: pointer;
-    }
-
-    .counter:hover {
-      border-color: var(--accent-border);
-    }
-
-    .counter:focus-visible {
-      outline: 2px solid var(--accent);
-      outline-offset: 2px;
-    }
-
-    .hero {
-      position: relative;
-    }
-
-    .hero .base,
-    .hero .framework,
-    .hero .vite {
-      inset-inline: 0;
-      margin: 0 auto;
-    }
-
-    .hero .base {
-      width: 170px;
-      position: relative;
-      z-index: 0;
-    }
-
-    .hero .framework,
-    .hero .vite {
-      position: absolute;
-    }
-
-    .hero .framework {
-      z-index: 1;
-      top: 34px;
-      height: 28px;
-      transform: perspective(2000px) rotateZ(300deg) rotateX(44deg)
-        rotateY(39deg) scale(1.4);
-    }
-
-    .hero .vite {
-      z-index: 0;
-      top: 107px;
-      height: 26px;
-      width: auto;
-      color: var(--vite-logo);
-      transform: perspective(2000px) rotateZ(300deg) rotateX(40deg)
-        rotateY(39deg) scale(0.8);
-    }
-
     main {
       height: 100vh;
     }
@@ -312,152 +235,6 @@ export class MyElement extends LitElement {
       flex-grow: 1;
       height: 100%;
       margin: auto;
-    }
-
-    #next-steps {
-      display: flex;
-      border-top: 1px solid var(--border);
-      text-align: left;
-    }
-
-    #next-steps > div {
-      flex: 1 1 0;
-      padding: 32px;
-    }
-
-    #next-steps .icon {
-      margin-bottom: 16px;
-      width: 22px;
-      height: 22px;
-    }
-
-    #docs {
-      border-right: 1px solid var(--border);
-    }
-
-    #next-steps ul {
-      list-style: none;
-      padding: 0;
-      display: flex;
-      gap: 8px;
-      margin: 32px 0 0;
-    }
-
-    #next-steps ul .logo {
-      height: 18px;
-    }
-
-    #next-steps ul .logo svg {
-      height: 100%;
-      width: auto;
-    }
-
-    #next-steps ul a {
-      color: var(--text-h);
-      font-size: 16px;
-      border-radius: 6px;
-      background: var(--social-bg);
-      display: flex;
-      padding: 6px 12px;
-      align-items: center;
-      gap: 8px;
-      text-decoration: none;
-      transition: box-shadow 0.3s;
-    }
-
-    #next-steps ul a:hover {
-      box-shadow: var(--shadow);
-    }
-
-    #next-steps ul .button-icon {
-      height: 18px;
-      width: 18px;
-    }
-
-    #spacer {
-      height: 88px;
-      border-top: 1px solid var(--border);
-    }
-
-    .ticks {
-      position: relative;
-      width: 100%;
-    }
-
-    .ticks::before,
-    .ticks::after {
-      content: "";
-      position: absolute;
-      top: -4.5px;
-      border: 5px solid transparent;
-    }
-
-    .ticks::before {
-      left: 0;
-      border-left-color: var(--border);
-    }
-
-    .ticks::after {
-      right: 0;
-      border-right-color: var(--border);
-    }
-
-    @media (max-width: 1024px) {
-      :host {
-        font-size: 16px;
-        width: 100%;
-        max-width: 100%;
-      }
-
-      h1,
-      ::slotted(h1) {
-        font-size: 36px;
-        margin: 20px 0;
-      }
-
-      h2,
-      ::slotted(h2) {
-        font-size: 20px;
-      }
-
-      #center {
-        padding: 32px 20px 24px;
-        gap: 18px;
-      }
-
-      #next-steps {
-        flex-direction: column;
-        text-align: center;
-      }
-
-      #next-steps > div {
-        padding: 24px 20px;
-      }
-
-      #docs {
-        border-right: none;
-        border-bottom: 1px solid var(--border);
-      }
-
-      #next-steps ul {
-        margin-top: 20px;
-        flex-wrap: wrap;
-        justify-content: center;
-      }
-
-      #next-steps ul li {
-        flex: 1 1 calc(50% - 8px);
-      }
-
-      #next-steps ul a {
-        width: 100%;
-        justify-content: center;
-        box-sizing: border-box;
-      }
-
-      #spacer {
-        height: 48px;
-      }
     }
   `;
 }
