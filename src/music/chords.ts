@@ -3,8 +3,16 @@ import {
   qualities,
   semitonesInOctave,
   eharmonicEquivalentToSemitoneIdx,
+  romanNumerals,
 } from "./constants";
-import type { Chord, Note, Scale, Quality } from "./types";
+import type {
+  Chord,
+  Note,
+  Scale,
+  Quality,
+  LowercaseNumeral,
+  DecoratedNumeral,
+} from "./types";
 import { wrapIndex } from "./utils";
 
 const chordQuality = (notesInChord: Note[]) => {
@@ -30,26 +38,27 @@ const chordQuality = (notesInChord: Note[]) => {
   return Object.keys(chordQualityIntervalMap)[matchingIdx] as Quality;
 };
 
+const toUpperCaseNumeral = (numeral: LowercaseNumeral) =>
+  numeral.toUpperCase() as Uppercase<LowercaseNumeral>;
+
 const transformRomanNumeralAnalysis = (
   quality: Quality,
-): ((numeral: string) => string) => {
+): ((numeral: LowercaseNumeral) => DecoratedNumeral) => {
   switch (quality) {
     case "major":
-      return (numeral) => numeral.toUpperCase();
+      return toUpperCaseNumeral;
     case "minor":
       return (numeral) => numeral;
     case "diminished":
       return (numeral) => `${numeral}${qualities[quality]}`;
     case "seventh":
     case "augmented":
-      return (numeral) => `${numeral.toUpperCase()}${qualities[quality]}`;
+      return (numeral) => `${toUpperCaseNumeral(numeral)}${qualities[quality]}`;
     default:
       quality satisfies never;
       throw new Error("invalid quality");
   }
 };
-
-const romanNumerals = ["i", "ii", "iii", "iv", "v", "vi", "vii"] as const;
 
 const getRomanNumeral = (idx: number, quality: Quality) =>
   transformRomanNumeralAnalysis(quality)(romanNumerals[idx]);

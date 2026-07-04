@@ -3,6 +3,7 @@ import type {
   scaleIntervals,
   modeIntervals,
   qualities,
+  romanNumerals,
 } from "./constants";
 
 /**
@@ -27,11 +28,14 @@ export type Semitone = [Note, Note, Note?];
 
 export type Quality = keyof typeof qualities;
 type QualityDecoration = (typeof qualities)[Quality];
+export type LowercaseNumeral = (typeof romanNumerals)[number];
+export type BaseNumeral = LowercaseNumeral | Uppercase<LowercaseNumeral>;
+export type DecoratedNumeral = `${BaseNumeral}${string}`;
 export interface Chord {
   name: `${Note}${QualityDecoration}`;
   notes: Note[];
   idxs: number[];
-  romanNumeral: string;
+  romanNumeral: DecoratedNumeral;
 }
 
 export type GetNaturalFromNote<T extends Note> =

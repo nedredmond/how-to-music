@@ -70,3 +70,12 @@ export const chordQualityIntervalMap = {
   augmented: [4, 4],
   diminished: [3, 3],
 } as const satisfies Record<keyof typeof qualities, number[]>;
+export const romanNumerals = [
+  "i",
+  "ii",
+  "iii",
+  "iv",
+  "v",
+  "vi",
+  "vii",
+] as const;
