@@ -10,6 +10,8 @@ import {
   getChords,
   type Note,
   type Scale,
+  type Accidental,
+  type ScaleName,
 } from "./music";
 
 /**
@@ -26,10 +28,18 @@ export class MyElement extends LitElement {
   @property({ type: Array })
   scale: Readonly<Scale> | undefined = undefined;
 
+  protected firstUpdated() {
+    this.renderRoot.querySelector("form")?.requestSubmit();
+  }
+
   render() {
     return html`
       <main>
-        <form id="center" @submit=${this._onSubmit}>
+        <form
+          id="center"
+          @submit=${this._onSubmit}
+          @change=${this._onInnerChange}
+        >
           <div class="wrapper">
             <label>
               Key:
@@ -79,15 +89,12 @@ export class MyElement extends LitElement {
                 </optgroup>
               </select>
             </label>
-            <button type="submit" class="counter" part="button">
-              Get scale
-            </button>
           </div>
           <output name="scale" for="note accidental scale">
             ${!this.scale
               ? nothing
               : html`
-                  <div>${this.scale}</div>
+                  <div>${this.scale.join(", ")}</div>
                   <ul>
                     ${getChords(this.scale).map(
                       (chord) => html`
@@ -109,14 +116,14 @@ export class MyElement extends LitElement {
     e.preventDefault();
     const formData = new FormData(e.target as HTMLFormElement);
     const data = Object.fromEntries(formData.entries());
-    const a = data.accidental.valueOf();
-    const tonic =
-      data.note.valueOf() +
-      (a === "natural" ? "" : accidentals[a as keyof typeof accidentals]);
-    this.scale = getScale(
-      tonic as Note,
-      data.scale.valueOf() as keyof typeof scaleIntervals,
-    );
+    const a = data.accidental.valueOf() as Accidental;
+    const tonic = data.note.valueOf() + (a === "natural" ? "" : accidentals[a]);
+    this.scale = getScale(tonic as Note, data.scale.valueOf() as ScaleName);
+  }
+
+  private _onInnerChange(e: Event) {
+    const form = e.currentTarget as HTMLFormElement | null;
+    form?.requestSubmit();
   }
 
   static styles = css`

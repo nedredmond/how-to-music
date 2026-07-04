@@ -4,6 +4,7 @@ import type {
   modeIntervals,
   qualities,
   romanNumerals,
+  accidentals,
 } from "./constants";
 
 /**
@@ -26,8 +27,11 @@ export type DoubleFlat = `${Natural}𝄫`;
 export type Note = Natural | Sharp | DoubleSharp | Flat | DoubleFlat;
 export type Semitone = [Note, Note, Note?];
 
+export type Accidental = keyof typeof accidentals;
+export type AccidentalDecoration = (typeof accidentals)[Accidental];
 export type Quality = keyof typeof qualities;
-type QualityDecoration = (typeof qualities)[Quality];
+export type QualityDecoration = (typeof qualities)[Quality];
+
 export type LowercaseNumeral = (typeof romanNumerals)[number];
 export type BaseNumeral = LowercaseNumeral | Uppercase<LowercaseNumeral>;
 export type DecoratedNumeral = `${BaseNumeral}${string}`;
