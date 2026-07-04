@@ -5,6 +5,7 @@ import {
   eharmonicEquivalentToSemitoneIdx,
 } from "./constants";
 import type { Chord, Note, Scale, Quality } from "./types";
+import { wrapIndex } from "./utils";
 
 const chordQuality = (notesInChord: Note[]) => {
   const intervals = notesInChord.reduce<number[]>(
@@ -15,9 +16,7 @@ const chordQuality = (notesInChord: Note[]) => {
       const prevNoteIdx = eharmonicEquivalentToSemitoneIdx[notes[i - 1]];
       const currentNoteIdx = eharmonicEquivalentToSemitoneIdx[note];
       const diff = currentNoteIdx - prevNoteIdx;
-      intervals.push(
-        ((diff % semitonesInOctave) + semitonesInOctave) % semitonesInOctave,
-      );
+      intervals.push(wrapIndex(diff, semitonesInOctave));
       return intervals;
     },
     [],
@@ -52,28 +51,26 @@ const transformRomanNumeralAnalysis = (
 
 const romanNumerals = ["i", "ii", "iii", "iv", "v", "vi", "vii"] as const;
 
-const romanNumeral = (idx: number, quality: Quality) =>
+const getRomanNumeral = (idx: number, quality: Quality) =>
   transformRomanNumeralAnalysis(quality)(romanNumerals[idx]);
 
 export const getChords = (scale: Readonly<Scale>) => {
   const heptatonicForm = scale.slice(0, -1);
-  const extendedScale = [...heptatonicForm, ...scale];
-  console.log({ heptatonicForm });
   return heptatonicForm.reduce<Chord[]>((chords, note, i) => {
     const root = i;
     const third = i + 2;
     const fifth = i + 4;
     const notes = [
-      extendedScale[root],
-      extendedScale[third],
-      extendedScale[fifth],
+      scale[wrapIndex(root, heptatonicForm.length)],
+      scale[wrapIndex(third, heptatonicForm.length)],
+      scale[wrapIndex(fifth, heptatonicForm.length)],
     ];
     const quality = chordQuality(notes);
     chords.push({
+      notes,
       idxs: [root, third, fifth],
-      notes: [extendedScale[root], extendedScale[third], extendedScale[fifth]],
       name: `${note}${qualities[quality]}`,
-      romanNumeral: romanNumeral(i, quality),
+      romanNumeral: getRomanNumeral(i, quality),
     });
     return chords;
   }, []);

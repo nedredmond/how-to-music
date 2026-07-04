@@ -7,3 +7,6 @@ export const getFreq = (semitones: number, relativeToFreq: number = a4hz) =>
 export const extractNatural = (note: Note): Natural => {
   return note[0] as GetNaturalFromNote<Note>;
 };
+
+export const wrapIndex = (n: number, size: number) =>
+  ((n % size) + size) % size;
