@@ -5,6 +5,7 @@ export class Synth {
   #dataArray?: Float32Array<ArrayBuffer>;
 
   constructor() {
+    // can be used for visual waveform output; currently used to check if playing
     this.#analyser = Synth.ctx.createAnalyser();
     this.#analyser.connect(Synth.ctx.destination);
     this.#dataArray = new Float32Array(this.#analyser.frequencyBinCount);
@@ -14,6 +15,7 @@ export class Synth {
     const compressor = Synth.ctx.createDynamicsCompressor();
     compressor.connect(this.#analyser);
 
+    // volume control
     this.#gainNode = Synth.ctx.createGain();
     this.#gainNode.connect(compressor);
     this.#gainNode.gain.value = 0.5;
@@ -56,8 +58,8 @@ export class Synth {
     const osc = this.#createOsc();
     osc.start();
     for (const [i, freq] of freqs.entries()) {
-      osc.frequency.setValueAtTime(freq, Synth.ctx.currentTime + i / 2);
-      osc.stop(Synth.ctx.currentTime + (1 + i) / 2);
+      osc.frequency.setValueAtTime(freq, Synth.ctx.currentTime + i / 2.5);
+      osc.stop(Synth.ctx.currentTime + (1 + i) / 2.5);
     }
   }
 
@@ -70,7 +72,7 @@ export class Synth {
 
       osc.start();
       osc.frequency.setValueAtTime(freq, Synth.ctx.currentTime);
-      osc.stop(Synth.ctx.currentTime + 1.5);
+      osc.stop(Synth.ctx.currentTime + 1);
     }
   }
 }
