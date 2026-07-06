@@ -1,6 +1,6 @@
 export class Synth {
   static ctx = new AudioContext();
-  #compressor?: DynamicsCompressorNode;
+  #gainNode?: GainNode;
   #analyser?: AnalyserNode;
   #dataArray?: Float32Array<ArrayBuffer>;
 
@@ -10,17 +10,31 @@ export class Synth {
     this.#dataArray = new Float32Array(this.#analyser.frequencyBinCount);
     this.#analyser.getFloatTimeDomainData(this.#dataArray);
 
-    this.#compressor = Synth.ctx.createDynamicsCompressor();
-    this.#compressor.connect(this.#analyser);
+    // necessary to prevent distortion in Chrome
+    const compressor = Synth.ctx.createDynamicsCompressor();
+    compressor.connect(this.#analyser);
+
+    this.#gainNode = Synth.ctx.createGain();
+    this.#gainNode.connect(compressor);
+    this.#gainNode.gain.value = 0.5;
   }
 
   #createOsc() {
-    if (!this.#compressor) throw new Error("Oscillator could not be created.");
+    if (!this.#gainNode) throw new Error("Oscillator could not be created.");
 
     const osc = Synth.ctx?.createOscillator();
-    osc.connect(this.#compressor);
+    osc.connect(this.#gainNode);
 
     return osc;
+  }
+
+  get volume() {
+    return this.#gainNode?.gain.value ?? 0;
+  }
+  set volume(value: number) {
+    if (!this.#gainNode)
+      throw new Error("Synch failed to initialize; cannot set volume.");
+    this.#gainNode.gain.value = Math.min(1, Math.max(0, value));
   }
 
   isPlaying() {
