@@ -1,6 +1,5 @@
 import type { Note, Intervals as IntervalSet, Semitone } from "./types";
 
-export const a4hz = 440.0;
 export const heptatonicScaleLength = 7;
 
 export const naturals = ["A", "B", "C", "D", "E", "F", "G"] as const;

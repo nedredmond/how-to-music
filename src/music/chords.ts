@@ -1,3 +1,4 @@
+import { wrapIndex } from "../utils";
 import {
   chordQualityIntervalMap,
   qualities,
@@ -13,7 +14,6 @@ import type {
   LowercaseNumeral,
   DecoratedNumeral,
 } from "./types";
-import { wrapIndex } from "./utils";
 
 const chordQuality = (notesInChord: Note[]) => {
   const intervals = notesInChord.reduce<number[]>(

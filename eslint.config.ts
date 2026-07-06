@@ -20,6 +20,15 @@ export default defineConfig([
     plugins: { js },
     extends: ["js/recommended"],
     languageOptions: { globals: globals.browser },
+    rules: {
+      '@typescript-eslint/no-unused-expressions': [
+        'error',
+        {
+          allowShortCircuit: true,
+          allowTernary: true
+        }
+      ]
+    }
   },
 
   // ── TypeScript ────────────────────────────────────────────────────────

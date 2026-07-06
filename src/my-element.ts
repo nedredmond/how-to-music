@@ -13,6 +13,8 @@ import {
   type Accidental,
   type ScaleName,
 } from "./music";
+import { Synth } from "./synth";
+import { notesToFreqs } from "./utils";
 
 /**
  * An example element.
@@ -22,13 +24,20 @@ import {
  */
 @customElement("my-element")
 export class MyElement extends LitElement {
+  #synth: Synth;
+  constructor() {
+    super();
+    this.#synth = new Synth();
+  }
+
   /**
    * The number of times the button has been clicked.
    */
   @property({ type: Array })
   scale: Readonly<Scale> | undefined = undefined;
 
-  protected firstUpdated() {
+  protected async firstUpdated() {
+    await this.updateComplete;
     this.renderRoot.querySelector("form")?.requestSubmit();
   }
 
@@ -95,12 +104,34 @@ export class MyElement extends LitElement {
               ? nothing
               : html`
                   <div>${this.scale.join(", ")}</div>
+                  <button
+                    @click=${() => {
+                      if (this.scale) {
+                        this.#synth.playMelody(
+                          notesToFreqs(this.scale, this.scale?.[0]),
+                        );
+                      }
+                    }}
+                  >
+                    HEAR IT
+                  </button>
                   <ul>
                     ${getChords(this.scale).map(
                       (chord) => html`
                         <li>
                           ${unsafeHTML(chord.romanNumeral)}:
                           ${unsafeHTML(chord.name)}
+                          <button
+                            @click=${() => {
+                              if (chord.notes) {
+                                this.#synth.playHarmony(
+                                  notesToFreqs(chord.notes, this.scale?.[0]),
+                                );
+                              }
+                            }}
+                          >
+                            Play
+                          </button>
                         </li>
                       `,
                     )}
