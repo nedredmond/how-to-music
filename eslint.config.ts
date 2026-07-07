@@ -4,6 +4,7 @@ import tseslint from "typescript-eslint";
 import css from "@eslint/css";
 import { defineConfig } from "eslint/config";
 import { configs as litConfigs } from "eslint-plugin-lit";
+import {configs as wcConfigs} from 'eslint-plugin-wc';
 import importPlugin from "eslint-plugin-import";
 
 export default defineConfig([
@@ -62,10 +63,12 @@ export default defineConfig([
     },
   },
 
-  // ── Lit components ────────────────────────────────────────────────────
+  // ── Lit web components ────────────────────────────────────────────────────
   {
+    settings: {"wc": {"elementBaseClasses": ["LitElement"]}},
     files: ["src/**/*.ts", "**/*.component.ts", "**/*-element.ts"],
-    extends: [litConfigs["flat/recommended"]],
+    extends: [litConfigs["flat/recommended"], wcConfigs["flat/recommended"]],
+    
   },
 
   // ── CSS ───────────────────────────────────────────────────────────────
