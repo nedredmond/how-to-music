@@ -1,2 +1,2 @@
 export * from "./app-layout";
-export * from "./keyboard";
+export * from "./lit-keyboard";

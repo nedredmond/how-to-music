@@ -15,8 +15,6 @@ import {
 } from "./music";
 import { Synth } from "./synth";
 import { notesToFreqs } from "./utils";
-import './keyboard';
-import '@lit-labs/virtualizer';
 
 @customElement("app-layout")
 export class AppLayout extends LitElement {
@@ -43,10 +41,8 @@ export class AppLayout extends LitElement {
         <h1>how to music</h1>
       </heading>
       <main>
-        <form
-          @submit=${this._onSubmit}
-          @change=${this._onInnerChange}
-        >
+        <slot name="keyboard"></slot>
+        <form @submit=${this._onSubmit} @change=${this._onInnerChange}>
           <div class="wrapper">
             <label>
               Key:
@@ -176,7 +172,7 @@ export class AppLayout extends LitElement {
       font: 18px/145% var(--sans);
       letter-spacing: 0.18px;
 
-      width: 1126px;
+      width: 900px;
       max-width: 100%;
       margin: 0 auto;
       text-align: center;
@@ -205,15 +201,13 @@ export class AppLayout extends LitElement {
     }
 
     h1,
-    h2,
-    {
+    h2 {
       font-family: var(--heading);
       font-weight: 500;
       color: var(--text-h);
     }
 
-    h1,
-    {
+    h1 {
       font-size: 56px;
       letter-spacing: -1.68px;
       margin: 32px 0;
@@ -263,11 +257,6 @@ export class AppLayout extends LitElement {
 
     form {
       display: contents;
-    }
-
-    keyboard {
-      width: 100%;
-      overflow: auto;
     }
   `;
 }

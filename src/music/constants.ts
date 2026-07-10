@@ -17,9 +17,6 @@ export const qualities = {
 } as const;
 
 export const semitones = [
-  ["G𝄪", "A", "B𝄫"],
-  ["A♯", "B♭", "C𝄫"],
-  ["A𝄪", "B", "C♭"],
   ["B♯", "C", "D𝄫"],
   ["B𝄪", "C♯", "D♭"],
   ["C𝄪", "D", "E𝄫"],
@@ -29,6 +26,9 @@ export const semitones = [
   ["E𝄪", "F♯", "G♭"],
   ["F𝄪", "G", "A𝄫"],
   ["G♯", "A♭"],
+  ["G𝄪", "A", "B𝄫"],
+  ["A♯", "B♭", "C𝄫"],
+  ["A𝄪", "B", "C♭"],
 ] as const satisfies Semitone[];
 export const semitonesInOctave = semitones.length; // 12
 export const eharmonicEquivalentToSemitoneIdx = semitones.reduce(

@@ -1,7 +1,14 @@
 :root {
   color-scheme: light dark;
   background-color: #ffffff;
-  scrollbar-gutter: stable;
+}
+
+@supports (scrollbar-gutter: stable) {
+  :root {
+    html {
+      scrollbar-gutter: stable;
+    }
+  }
 }
 
 @media (prefers-color-scheme: dark) {
