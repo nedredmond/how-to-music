@@ -1,6 +1,7 @@
 :root {
   color-scheme: light dark;
   background-color: #ffffff;
+  scrollbar-gutter: stable;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -20,5 +21,4 @@ body {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  overflow-x: hidden;
 }

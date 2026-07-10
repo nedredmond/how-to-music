@@ -15,6 +15,8 @@ import {
 } from "./music";
 import { Synth } from "./synth";
 import { notesToFreqs } from "./utils";
+import './keyboard';
+import '@lit-labs/virtualizer';
 
 @customElement("app-layout")
 export class AppLayout extends LitElement {
@@ -37,9 +39,11 @@ export class AppLayout extends LitElement {
 
   render() {
     return html`
+      <heading>
+        <h1>how to music</h1>
+      </heading>
       <main>
         <form
-          id="center"
           @submit=${this._onSubmit}
           @change=${this._onInnerChange}
         >
@@ -176,7 +180,6 @@ export class AppLayout extends LitElement {
       max-width: 100%;
       margin: 0 auto;
       text-align: center;
-      border-inline: 1px solid var(--border);
       min-height: 100svh;
       display: flex;
       flex-direction: column;
@@ -203,15 +206,14 @@ export class AppLayout extends LitElement {
 
     h1,
     h2,
-    ::slotted(h1),
-    ::slotted(h2) {
+    {
       font-family: var(--heading);
       font-weight: 500;
       color: var(--text-h);
     }
 
     h1,
-    ::slotted(h1) {
+    {
       font-size: 56px;
       letter-spacing: -1.68px;
       margin: 32px 0;
@@ -248,18 +250,24 @@ export class AppLayout extends LitElement {
     }
 
     main {
-      height: 100vh;
-    }
-
-    #center {
+      height: 100%;
+      width: 100%;
       display: flex;
       flex-direction: column;
       gap: 25px;
       place-content: center;
       place-items: center;
       flex-grow: 1;
-      height: 100%;
       margin: auto;
+    }
+
+    form {
+      display: contents;
+    }
+
+    keyboard {
+      width: 100%;
+      overflow: auto;
     }
   `;
 }
