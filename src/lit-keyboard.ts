@@ -1,8 +1,9 @@
 import { css, html, LitElement } from "lit";
-import { customElement } from "lit/decorators.js";
-import { semitones } from "./music";
+import { customElement, property } from "lit/decorators.js";
+import { accidentals, semitones } from "./music";
 import "@lit-labs/virtualizer";
 import { createRef, type Ref } from "lit/directives/ref.js";
+import { classMap } from "lit/directives/class-map.js";
 
 const getKeys = () => {
   const keys: string[] = [];
@@ -14,13 +15,39 @@ const getKeys = () => {
 
 @customElement(`lit-key`)
 class LitKey extends LitElement {
+  @property({ type: Boolean })
+  accidental = false;
+
   render() {
+    console.log(this.accidental);
+    const classes = {
+      accidental: this.accidental,
+    };
     return html`
-      <button style="height: 100%; width: 40px; margin-inline: 2px;">
+      <button class=${classMap(classes)}>
         <slot></slot>
       </button>
     `;
   }
+
+  static styles = css`
+    button {
+      height: 100%;
+      width: 40px;
+      margin-inline: 2px;
+      border-radius: 5px;
+
+      background-color: ivory;
+      color: black;
+      border: solid 2px lightgray;
+
+      &.accidental {
+        background-color: black;
+        color: white;
+        border: solid 2px lightgray;
+      }
+    }
+  `;
 }
 
 @customElement("lit-keyboard")
@@ -39,7 +66,13 @@ export class LitKeyboard extends LitElement {
           },
         }}
         .items=${getKeys()}
-        .renderItem=${(note: string) => html`<lit-key>${note}</lit-key>`}
+        .renderItem=${(note: string) =>
+          html`<lit-key
+            .accidental=${Object.values(accidentals).some((a) =>
+              note.includes(a),
+            )}
+            >${note}</lit-key
+          >`}
       ></lit-virtualizer>
     `;
   }

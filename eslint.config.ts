@@ -73,7 +73,7 @@ export default defineConfig([
 
   // ── CSS ───────────────────────────────────────────────────────────────
   {
-    files: ["**/*.css"],
+    files: ["**/*.css, **/*.ts"],
     plugins: { css },
     language: "css/css",
     extends: ["css/recommended"],
