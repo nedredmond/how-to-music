@@ -1,8 +1,11 @@
 export class Synth {
   static ctx = new AudioContext();
-  #gainNode?: GainNode;
+  #gain?: GainNode;
   #analyser?: AnalyserNode;
   #dataArray?: Float32Array<ArrayBuffer>;
+  #osc?: OscillatorNode;
+
+  #vol: number = 0.5;
 
   constructor() {
     // can be used for visual waveform output; currently used to check if playing
@@ -16,28 +19,50 @@ export class Synth {
     compressor.connect(this.#analyser);
 
     // volume control
-    this.#gainNode = Synth.ctx.createGain();
-    this.#gainNode.connect(compressor);
-    this.#gainNode.gain.value = 0.5;
+    this.#gain = Synth.ctx.createGain();
+    this.#gain.connect(compressor);
+    this.#gain.gain.value = 0.5;
+  }
+
+  get #now() {
+    return Synth.ctx.currentTime;
+  }
+
+  get volume() {
+    return this.#vol;
+  }
+
+  set volume(value: number) {
+    if (!this.#gain)
+      throw new Error("Synth failed to initialize; cannot set volume.");
+    this.#vol = Math.min(1, Math.max(0, value));
+    this.#gain.gain.value = this.#vol;
   }
 
   #createOsc() {
-    if (!this.#gainNode) throw new Error("Oscillator could not be created.");
+    if (!this.#gain) throw new Error("Oscillator could not be created.");
 
     const osc = Synth.ctx?.createOscillator();
-    osc.connect(this.#gainNode);
+    osc.connect(this.#gain);
 
     return osc;
   }
 
-  get volume() {
-    return this.#gainNode?.gain.value ?? 0;
-  }
-  set volume(value: number) {
-    if (!this.#gainNode)
-      throw new Error("Synch failed to initialize; cannot set volume.");
-    this.#gainNode.gain.value = Math.min(1, Math.max(0, value));
-  }
+  // #startOsc(osc: OscillatorNode, when: number = 0) {
+  //   const decay = 0.3 + when;
+  //   this.#gain?.gain.setValueAtTime(0, this.#now);
+  //   this.#gain?.gain.exponentialRampToValueAtTime(this.#vol, this.#now + decay)
+  //   osc.start(this.#now);
+  // }
+
+  // #stopOsc(osc: OscillatorNode, when: number = 0) {
+  //   const decay = 0.3 + when;
+  //   this.#gain?.gain.exponentialRampToValueAtTime(0.0001, this.#now + decay);
+  //   osc.stop(this.#now + decay);
+
+  //   // reset volume
+  //   this.#gain?.gain.setValueAtTime(this.#vol, this.#now + decay + 0.0001);
+  // }
 
   isPlaying() {
     if (Synth.ctx.state !== "running") return false;
@@ -51,6 +76,25 @@ export class Synth {
     return false;
   }
 
+  async startNote(freq: number) {
+    if (this.isPlaying()) return;
+    await Synth.ctx.resume();
+
+    console.log("starting note");
+
+    this.#osc = this.#createOsc();
+    this.#osc.frequency.setValueAtTime(freq, this.#now);
+    this.#osc.start(this.#now)
+  }
+  
+  async stopNote() {
+    if (!this.#osc || !this.isPlaying()) return;
+
+    console.log("stopping note")
+
+    this.#osc.stop(this.#now)
+  }
+
   async playMelody(freqs: number[]) {
     if (this.isPlaying()) return;
     await Synth.ctx.resume();
@@ -58,8 +102,8 @@ export class Synth {
     const osc = this.#createOsc();
     osc.start();
     for (const [i, freq] of freqs.entries()) {
-      osc.frequency.setValueAtTime(freq, Synth.ctx.currentTime + i / 2.5);
-      osc.stop(Synth.ctx.currentTime + (1 + i) / 2.5);
+      osc.frequency.setValueAtTime(freq, this.#now + i / 2.5);
+      osc.stop(this.#now + (1 + i) / 2.5);
     }
   }
 
@@ -71,8 +115,8 @@ export class Synth {
       const osc = this.#createOsc();
 
       osc.start();
-      osc.frequency.setValueAtTime(freq, Synth.ctx.currentTime);
-      osc.stop(Synth.ctx.currentTime + 1);
+      osc.frequency.setValueAtTime(freq, this.#now);
+      osc.stop(this.#now + 1);
     }
   }
 }

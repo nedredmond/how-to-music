@@ -15,6 +15,7 @@ import {
 } from "./music";
 import { Synth } from "./synth";
 import { notesToFreqs } from "./utils";
+import { styleMap } from "lit/directives/style-map.js";
 
 @customElement("app-layout")
 export class AppLayout extends LitElement {
@@ -97,7 +98,6 @@ export class AppLayout extends LitElement {
             ${!this.scale
               ? nothing
               : html`
-                  <div>${this.scale.join(", ")}</div>
                   <button
                     @click=${() => {
                       if (this.scale) {
@@ -107,14 +107,12 @@ export class AppLayout extends LitElement {
                       }
                     }}
                   >
-                    HEAR IT
+                    ${this.scale.join(", ")}
                   </button>
-                  <ul>
+                  <ul style=${styleMap({"list-style": "none", "padding": "unset"})}>
                     ${getChords(this.scale).map(
                       (chord) => html`
                         <li>
-                          ${unsafeHTML(chord.romanNumeral)}:
-                          ${unsafeHTML(chord.name)}
                           <button
                             @click=${() => {
                               if (chord.notes) {
@@ -123,8 +121,10 @@ export class AppLayout extends LitElement {
                                 );
                               }
                             }}
+                            style=${styleMap({inlineSize: "100%"})}
                           >
-                            Play
+                            ${unsafeHTML(chord.romanNumeral)}:
+                            ${unsafeHTML(chord.name)}
                           </button>
                         </li>
                       `,
