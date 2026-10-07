@@ -109,7 +109,13 @@ export class AppLayout extends LitElement {
                   >
                     ${this.scale.join(", ")}
                   </button>
-                  <ul style=${styleMap({"list-style": "none", "padding": "unset"})}>
+                  <ul role="list" style=${styleMap({
+                    "list-style": "none", 
+                    "padding": "unset",
+                    "display": "flex",
+                    "flex-direction": "column",
+                    "gap": "1rem"
+                  })}>
                     ${getChords(this.scale).map(
                       (chord) => html`
                         <li>
