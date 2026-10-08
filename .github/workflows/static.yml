@@ -37,8 +37,6 @@ jobs:
           runtime: node@22
           cache: true
       - name: build
-        env:
-          BASE_PATH: '/how-to-music'
         run: |
           pnpm build
           touch dist/.nojekyll
